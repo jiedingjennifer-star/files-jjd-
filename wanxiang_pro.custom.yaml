@@ -1,0 +1,93 @@
+# 本文件的工作目录是在用户根目录，本目录携带是因为如果放外面就会更新的时候覆盖你的修改，因此我只能藏起来。
+# 如果没有按初始化说明进行初始化那么你需要手动复制本文件到上层目录，请知悉。
+  #patch:
+    #super_sequence/up: "分号之类你能按的键"
+    #super_sequence/pin: "..."
+
+ #super_sequence:
+  #db_name: "sequence"     # 数据持久化
+  #up:    "Control+j"      # 上移
+  #down:  "Control+k"      # 下移
+  #reset: "Control+l"      # 重置
+  #pin:   "Control+p"      # 置顶
+
+patch:
+  speller/algebra:
+    __patch:
+      #- wanxiang_algebra:/模糊音_nl
+      #- wanxiang_algebra:/模糊音_ry
+      #- wanxiang_algebra:/模糊音_hf
+      #- wanxiang_algebra:/模糊音_rl
+      #- wanxiang_algebra:/模糊音_kg
+      #- wanxiang_algebra:/模糊音_en_eng
+      #- wanxiang_algebra:/模糊音_in_ing
+      #- wanxiang_algebra:/模糊音_c_ch
+      #- wanxiang_algebra:/模糊音_z_zh
+      #- wanxiang_algebra:/模糊音_s_sh
+      - wanxiang_algebra:/pro/小鹤双拼
+      # 可选输入方案名称：全拼，自然码，小鹤双拼，搜狗双拼，微软双拼，智能ABC，紫光双拼，国标双拼，拼音加加，乱序17，万象拼音，首道双拼，蓝天双拼，大牛双拼，自然龙，汉心龙
+      - wanxiang_algebra:/pro/间接辅助
+      #辅助码升级为：直接辅助和间接辅助两种类型，都是句中任意，不同点在于直接辅助是nire=你  而间接则需要/引导  ni/re=你 ，在这个基础上直接辅助支持拼音后任意位置数字声调参与，间接辅助声调在/引导前参与
+      - wanxiang_algebra:/小鹤双拼提权             #自然码提权、小鹤双拼提权 可选
+      - wanxiang_algebra:/18jian
+      #- wanxiang_algebra:/18jian
+      #- wanxiang_algebra:/14jian
+
+  #下面是候选数量
+  menu/page_size: 6
+
+  # ===== 新增：librime-predict 原生预测 =====
+  "engine/processors/@before 0": predictor
+  "engine/translators/@before 0": predict_translator
+
+
+
+  # 自己下载的一个预测小包jjd，qq上的人
+  predictor:
+    db: predict.db
+    max_candidates: 6      # 跟 page_size 对齐
+    max_iterations: 3      # 只串一级
+
+
+  "switches/+":
+    - name: prediction
+      states: [ 预测关, 预测开 ]
+      reset: 1
+  
+  #这两个参数控制的是「语法模型要管多长的词组」jjd好像是我放的
+  "grammar/collocation_max_length": 6
+  "grammar/collocation_min_length": 3
+  
+  #启动自造词库 jjd
+  abbrev_phrase:
+    dictionary: wanxiang_abbrev
+    insert_position: 5
+    max_candidates: 6
+
+    #英文后面加空格。jjd
+  wanxiang_english/english_spacing: after
+
+    #wanxiang markdown 映射，jjd
+  # 红色加粗
+  paired_symbols/symkey/rb: '<span style="color:red;font-weight:bold">|</span>'
+  # 绿色加粗
+  paired_symbols/symkey/gb: '<span style="color:green;font-weight:bold">|</span>'
+  # 荧光黄底加粗
+  paired_symbols/symkey/hl: '<span style="background-color:yellow;font-weight:bold">|</span>'
+  # 蓝色加粗
+  paired_symbols/symkey/bbb: '<span style="color:blue;font-weight:bold">|</span>'
+  # 淡绿底加粗
+  paired_symbols/symkey/gl: '<span style="background-color:#d4f5d4;font-weight:bold">|</span>'
+  # 粉红字加粗
+  paired_symbols/symkey/pb: '<span style="color:hotpink;font-weight:bold">|</span>'
+    # 纯加粗（无颜色）
+  paired_symbols/symkey/bd: '<span style="font-weight:bold">|</span>'
+
+  # ===== 新增：开启英文候选词个数 =====
+  "wanxiang_english/max_candidates": 20
+
+
+
+
+
+  
